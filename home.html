@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duck Delivery 🐥 | Narnaul's Favorite Food Delivery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #FFD700;
+            --primary-light: #FFF9C4;
+            --secondary: #FFA000;
+            --white: #FFFFFF;
+            --gray: #F5F5F5;
+            --dark-gray: #E0E0E0;
+            --text: #1C1C1E;
+            --blue: #007AFF;
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --border-radius: 14px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--white);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            line-height: 1.5;
+        }
+
+        /* Header */
+        header {
+            background-color: var(--white);
+            padding: 15px 20px;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            font-size: 18px;
+            color: var(--text);
+        }
+
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+
+        /* User Popup */
+        .user-popup {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            max-width: 300px;
+            background-color: var(--white);
+            box-shadow: var(--shadow-md);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            z-index: 2000;
+            transform: translateX(100%);
+            transition: transform 0.3s ease-out;
+            margin: 10px;
+        }
+
+        .user-popup.active {
+            transform: translateX(0);
+        }
+
+        .user-popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .user-popup-backdrop.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .user-popup-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+
+        .user-popup-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 20px;
+        }
+
+        .user-popup-info {
+            flex: 1;
+        }
+
+        .user-popup-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .verified-badge {
+            color: var(--blue);
+            font-size: 16px;
+        }
+
+        .user-popup-email {
+            font-size: 14px;
+            color: #666;
+            margin-top: 2px;
+        }
+
+        .logout-btn {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            background-color: var(--gray);
+            border: none;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            margin-top: 20px;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .logout-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        /* Main Content */
+        main {
+            flex: 1;
+            padding: 20px;
+            max-width: 600px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin: 20px 0 30px;
+        }
+
+        .hero-image {
+            width: 100%;
+            max-width: 300px;
+            height: 300px;
+            margin: 0 auto 20px;
+            border-radius: var(--border-radius);
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .hero-btn {
+            padding: 15px 25px;
+            border-radius: var(--border-radius);
+            font-weight: 500;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .menu-btn {
+            background-color: var(--primary);
+            color: var(--text);
+        }
+
+        .cart-btn {
+            background-color: var(--white);
+            color: var(--text);
+            border: 1px solid var(--dark-gray);
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Food Grid */
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            margin: 30px 0 15px;
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .food-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .food-card {
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+
+        .food-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .food-image {
+            width: 100%;
+            height: 120px;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+        }
+
+        .food-info {
+            padding: 15px;
+        }
+
+        .food-name {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .food-stats {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .food-price {
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: var(--secondary);
+        }
+
+        .food-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .food-btn {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .add-to-cart {
+            background-color: var(--gray);
+        }
+
+        .buy-now {
+            background-color: var(--primary);
+        }
+
+        .food-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* About Section */
+        .about-section {
+            background-color: var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin: 30px 0;
+        }
+
+        .about-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .about-text {
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            display: flex;
+            overflow-x: auto;
+            gap: 15px;
+            padding: 10px 0 20px;
+            scrollbar-width: none;
+        }
+
+        .testimonials::-webkit-scrollbar {
+            display: none;
+        }
+
+        .testimonial-card {
+            min-width: 250px;
+            background-color: var(--white);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .testimonial-rating {
+            color: var(--primary);
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .testimonial-text {
+            font-style: italic;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .testimonial-author {
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--primary-light);
+            padding: 30px 20px;
+            margin-top: 40px;
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .footer-link {
+            color: var(--text);
+            text-decoration: none;
+            font-size: 14px;
+            transition: color 0.2s ease;
+        }
+
+        .footer-link:hover {
+            color: var(--secondary);
+        }
+
+        .copyright {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .hero-buttons {
+                flex-direction: column;
+            }
+            
+            .hero-btn {
+                justify-content: center;
+            }
+            
+            .food-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="logo">Delivery Duck 🐥</div>
+        <div class="user-avatar" id="userAvatar">U</div>
+    </header>
+
+    <!-- User Popup -->
+    <div class="user-popup-backdrop" id="userPopupBackdrop"></div>
+    <div class="user-popup" id="userPopup">
+        <div class="user-popup-header">
+            <div class="user-popup-avatar" id="popupAvatar">U</div>
+            <div class="user-popup-info">
+                <div class="user-popup-name">
+                    <span id="popupName">User</span>
+                    <span class="verified-badge">✓</span>
+                </div>
+                <div class="user-popup-email" id="popupEmail">user@example.com</div>
+            </div>
+        </div>
+        <button class="logout-btn" id="logoutBtn">
+            <span class="material-icons">logout</span> Logout
+        </button>
+    </div>
+
+    <main>
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-image">🦆</div>
+            <div class="hero-buttons">
+                <a href="menu.html" class="hero-btn menu-btn">
+                    <span>📖</span> Visit Menu
+                </a>
+                <a href="cart.html" class="hero-btn cart-btn">
+                    <span>🛒</span> View Cart
+                </a>
+            </div>
+        </section>
+
+        <!-- Featured Food -->
+        <h2 class="section-title">
+            <span>🍔</span> Popular Items
+        </h2>
+        <div class="food-grid">
+            <div class="food-card">
+                <div class="food-image">🍗</div>
+                <div class="food-info">
+                    <h3 class="food-name">Chicken Biryani</h3>
+                    <div class="food-stats">Ordered by 1.3K+ people</div>
+                    <div class="food-price">₹180</div>
+                    <div class="food-actions">
+                        <button class="food-btn add-to-cart" data-item="Chicken Biryani" data-price="180">Add to Cart</button>
+                        <button class="food-btn buy-now" data-item="Chicken Biryani" data-price="180">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <div class="food-card">
+                <div class="food-image">🍕</div>
+                <div class="food-info">
+                    <h3 class="food-name">Margherita Pizza</h3>
+                    <div class="food-stats">Ordered by 890+ people</div>
+                    <div class="food-price">₹220</div>
+                    <div class="food-actions">
+                        <button class="food-btn add-to-cart" data-item="Margherita Pizza" data-price="220">Add to Cart</button>
+                        <button class="food-btn buy-now" data-item="Margherita Pizza" data-price="220">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <div class="food-card">
+                <div class="food-image">🍔</div>
+                <div class="food-info">
+                    <h3 class="food-name">Cheese Burger</h3>
+                    <div class="food-stats">Ordered by 1.1K+ people</div>
+                    <div class="food-price">₹120</div>
+                    <div class="food-actions">
+                        <button class="food-btn add-to-cart" data-item="Cheese Burger" data-price="120">Add to Cart</button>
+                        <button class="food-btn buy-now" data-item="Cheese Burger" data-price="120">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+            <div class="food-card">
+                <div class="food-image">🍜</div>
+                <div class="food-info">
+                    <h3 class="food-name">Veg Noodles</h3>
+                    <div class="food-stats">Ordered by 750+ people</div>
+                    <div class="food-price">₹110</div>
+                    <div class="food-actions">
+                        <button class="food-btn add-to-cart" data-item="Veg Noodles" data-price="110">Add to Cart</button>
+                        <button class="food-btn buy-now" data-item="Veg Noodles" data-price="110">Buy Now</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Section -->
+        <section class="about-section">
+            <h2 class="about-title">
+                <span>🦆</span> About Duck Delivery
+            </h2>
+            <p class="about-text">
+                Duck Delivery is Narnaul's favorite food delivery startup, bringing you the best local cuisine with speed and care. 
+                We partner with top restaurants in Narnaul to deliver delicious meals right to your doorstep. 
+                Fast, affordable, and always with a smile!
+            </p>
+        </section>
+
+        <!-- Testimonials -->
+        <h2 class="section-title">
+            <span>🌟</span> What People Say
+        </h2>
+        <div class="testimonials">
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">
+                    "The fastest delivery in Narnaul! Food always arrives hot and fresh. Highly recommend!"
+                </p>
+                <div class="testimonial-author">- Rajesh K.</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★☆</div>
+                <p class="testimonial-text">
+                    "Love their service! The duck-themed packaging is adorable and the food is delicious."
+                </p>
+                <div class="testimonial-author">- Priya M.</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="testimonial-rating">★★★★★</div>
+                <p class="testimonial-text">
+                    "Reliable even during festivals when other services fail. My go-to food delivery app!"
+                </p>
+                <div class="testimonial-author">- Vikram S.</div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="menu.html" class="footer-link">Menu</a>
+            <a href="cart.html" class="footer-link">Cart</a>
+            <a href="about.html" class="footer-link">About Us</a>
+            <a href="contact.html" class="footer-link">Contact</a>
+            <a href="#" class="footer-link">Instagram</a>
+            <a href="#" class="footer-link">Terms</a>
+        </div>
+        <div class="copyright">
+            © 2023 Duck Delivery Narnaul. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Firebase SDK -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { 
+            getAuth, 
+            onAuthStateChanged, 
+            signOut 
+        } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCyi3tprlp3USCk17A1URPzExoX3jm1dcQ",
+            authDomain: "duck-1de23.firebaseapp.com",
+            projectId: "duck-1de23",
+            storageBucket: "duck-1de23.firebasestorage.app",
+            messagingSenderId: "685426054062",
+            appId: "1:685426054062:web:2b214f4917e0f987926e3f"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // DOM Elements
+        const userAvatar = document.getElementById('userAvatar');
+        const popupAvatar = document.getElementById('popupAvatar');
+        const popupName = document.getElementById('popupName');
+        const popupEmail = document.getElementById('popupEmail');
+        const userPopup = document.getElementById('userPopup');
+        const userPopupBackdrop = document.getElementById('userPopupBackdrop');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const addToCartButtons = document.querySelectorAll('.add-to-cart');
+        const buyNowButtons = document.querySelectorAll('.buy-now');
+
+        // Initialize cart in localStorage if not exists
+        if (!localStorage.getItem('cart')) {
+            localStorage.setItem('cart', JSON.stringify([]));
+        }
+
+        // Get cart from localStorage
+        function getCart() {
+            return JSON.parse(localStorage.getItem('cart'));
+        }
+
+        // Add item to cart
+        function addToCart(item, price) {
+            const cart = getCart();
+            cart.push({ item, price });
+            localStorage.setItem('cart', JSON.stringify(cart));
+            
+            // Show confirmation
+            alert(`${item} added to cart!`);
+        }
+
+        // Buy now function (adds item and redirects to cart)
+        function buyNow(item, price) {
+            localStorage.setItem('cart', JSON.stringify([{ item, price }]));
+            window.location.href = 'cart.html';
+        }
+
+        // Check auth state
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in
+                const displayName = user.displayName || "User";
+                const email = user.email;
+                const initials = displayName.charAt(0).toUpperCase();
+                
+                // Update UI
+                userAvatar.textContent = initials;
+                popupAvatar.textContent = initials;
+                popupName.textContent = displayName;
+                popupEmail.textContent = email;
+            } else {
+                // No user is signed in
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Toggle user popup
+        userAvatar.addEventListener('click', () => {
+            userPopup.classList.add('active');
+            userPopupBackdrop.classList.add('active');
+        });
+
+        // Close popup when clicking backdrop
+        userPopupBackdrop.addEventListener('click', () => {
+            userPopup.classList.remove('active');
+            userPopupBackdrop.classList.remove('active');
+        });
+
+        // Logout functionality
+        logoutBtn.addEventListener('click', () => {
+            signOut(auth).then(() => {
+                window.location.href = 'index.html';
+            }).catch((error) => {
+                console.error('Logout error:', error);
+            });
+        });
+
+        // Add to cart buttons
+        addToCartButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.dataset.item;
+                const price = button.dataset.price;
+                addToCart(item, price);
+            });
+        });
+
+        // Buy now buttons
+        buyNowButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const item = button.dataset.item;
+                const price = button.dataset.price;
+                buyNow(item, price);
+            });
+        });
+    </script>
+</body>
+</html>
