@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-            :root {
+        :root {
             --primary: #FFD700;
             --primary-light: #FFF9C4;
             --secondary: #FFA000;
@@ -111,6 +111,20 @@
             background-color: var(--white);
         }
 
+        .password-wrapper {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+            user-select: none;
+        }
+
         .btn {
             width: 100%;
             padding: 15px;
@@ -123,6 +137,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            position: relative;
         }
 
         .btn-primary {
@@ -215,6 +230,42 @@
             display: block;
         }
 
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .remember-me input {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .remember-me label {
+            margin-bottom: 0;
+            color: #666;
+            font-weight: normal;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--white);
+            animation: spin 1s ease-in-out infinite;
+            position: absolute;
+            right: 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .hidden {
+            display: none;
+        }
+
         @media (max-width: 480px) {
             .login-container {
                 padding: 30px 20px;
@@ -226,26 +277,9 @@
                 height: 70px;
             }
         }
-        .remember-me {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .remember-me input {
-            width: auto;
-            margin-right: 10px;
-        }
-        
-        .remember-me label {
-            margin-bottom: 0;
-            color: #666;
-            font-weight: normal;
-        }
     </style>
 </head>
 <body>
-    <div class="login-container">
     <div class="login-container">
         <div class="logo-container">
             <div class="logo">
@@ -264,19 +298,25 @@
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
-                <input type="password" id="password" placeholder="Enter your password" required>
+                <div class="password-wrapper">
+                    <input type="password" id="password" placeholder="Enter your password" required>
+                    <i class="material-icons toggle-password">visibility_off</i>
+                </div>
             </div>
             <div class="remember-me">
                 <input type="checkbox" id="rememberMe">
                 <label for="rememberMe">Remember me</label>
             </div>
-            <button type="submit" class="btn btn-primary">Sign In</button>
+            <button type="submit" class="btn btn-primary" id="signInBtn">
+                <span class="btn-text">Sign In</span>
+                <div class="spinner hidden"></div>
+            </button>
         </form>
 
         <div class="divider">or</div>
 
         <button id="googleSignIn" class="btn btn-google">
-            <img src="https://i.ibb.co/cc5wX0BB/transparent-google-logo-iconic-google-logo-with-blue-green-and-1710875585209.webp" alt="Google logo" class="google-icon">
+            <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google logo" class="google-icon">
             Continue with Google
         </button>
 
@@ -286,9 +326,8 @@
         </div>
     </div>
 
-    <!-- Firebase SDK -->
     <script type="module">
-        // [Previous imports remain the same]
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { 
             getAuth, 
             signInWithEmailAndPassword, 
@@ -301,7 +340,7 @@
             onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-                const firebaseConfig = {
+        const firebaseConfig = {
             apiKey: "AIzaSyCyi3tprlp3USCk17A1URPzExoX3jm1dcQ",
             authDomain: "duck-1de23.firebaseapp.com",
             projectId: "duck-1de23",
@@ -315,68 +354,88 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
+        // DOM Elements
+        const loginForm = document.getElementById('loginForm');
+        const googleSignIn = document.getElementById('googleSignIn');
+        const forgotPassword = document.getElementById('forgotPassword');
+        const togglePassword = document.querySelector('.toggle-password');
+        const passwordInput = document.getElementById('password');
+        const signInBtn = document.getElementById('signInBtn');
+        const btnText = document.querySelector('.btn-text');
+        const spinner = document.querySelector('.spinner');
+
+        // Toggle password visibility
+        togglePassword.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                togglePassword.textContent = 'visibility';
+            } else {
+                passwordInput.type = 'password';
+                togglePassword.textContent = 'visibility_off';
+            }
+        });
+
         // Check auth state on page load
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                // User is signed in, redirect to home page
                 window.location.href = 'home.html';
             }
         });
 
         // Login with email/password
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const rememberMe = document.getElementById('rememberMe').checked;
-            const message = document.getElementById('message');
             
+            // Show loading spinner
+            btnText.classList.add('hidden');
+            spinner.classList.remove('hidden');
+            signInBtn.disabled = true;
+
             try {
-                // Set persistence based on user's choice
                 await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
-                
-                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                await signInWithEmailAndPassword(auth, email, password);
                 
                 showMessage('success', 'Login successful! Redirecting...');
                 setTimeout(() => {
                     window.location.href = 'home.html';
                 }, 1500);
             } catch (error) {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                showMessage('error', getErrorMessage(errorCode));
+                showMessage('error', getErrorMessage(error.code));
+            } finally {
+                // Hide loading spinner
+                btnText.classList.remove('hidden');
+                spinner.classList.add('hidden');
+                signInBtn.disabled = false;
             }
         });
 
-        // Google Sign-In - modified to include persistence
-        document.getElementById('googleSignIn').addEventListener('click', async () => {
+        // Google Sign-In
+        googleSignIn.addEventListener('click', async () => {
             try {
                 const rememberMe = document.getElementById('rememberMe').checked;
                 await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
                 
-                const result = await signInWithPopup(auth, provider);
-                
-                // This gives you a Google Access Token
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
+                await signInWithPopup(auth, provider);
                 
                 showMessage('success', 'Login successful! Redirecting...');
                 setTimeout(() => {
                     window.location.href = 'home.html';
                 }, 1500);
             } catch (error) {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                showMessage('error', getErrorMessage(errorCode));
+                if (error.code !== 'auth/popup-closed-by-user') {
+                    showMessage('error', getErrorMessage(error.code));
+                }
             }
         });
 
         // Forgot Password
-        document.getElementById('forgotPassword').addEventListener('click', (e) => {
+        forgotPassword.addEventListener('click', (e) => {
             e.preventDefault();
             const email = document.getElementById('email').value;
-            const message = document.getElementById('message');
             
             if (!email) {
                 showMessage('error', 'Please enter your email address first');
@@ -388,9 +447,7 @@
                     showMessage('success', 'Password reset email sent. Please check your inbox.');
                 })
                 .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    showMessage('error', getErrorMessage(errorCode));
+                    showMessage('error', getErrorMessage(error.code));
                 });
         });
 
