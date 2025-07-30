@@ -387,45 +387,55 @@
             opacity: 1;
         }
 
-        /* Floating Buttons */
-        .floating-buttons {
-            position: fixed;
-            bottom: 20px;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            padding: 0 20px;
-            pointer-events: none;
-            z-index: 99;
-        }
+.floating-buttons {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 999;
+  pointer-events: none;
+}
 
-        .floating-btn {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            pointer-events: auto;
-            transition: transform 0.3s ease;
-        }
+.floating-btn {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: auto;
+  transition: transform 0.3s ease;
+}
 
-        .floating-btn:hover {
-            transform: scale(1.1);
-        }
+.floating-btn:hover {
+  transform: scale(1.1);
+}
 
-        .whatsapp-btn {
-            background-color: var(--whatsapp);
-            color: var(--white);
-        }
+.floating-btn img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  display: block;
+}
 
-        .instagram-btn {
-            background: var(--instagram);
-            color: var(--white);
-        }
+/* WhatsApp = green bg */
+.real-whatsapp {
+  background-color: #25D366;
+}
 
+/* Instagram = gradient bg */
+.real-instagram {
+  background: radial-gradient(circle at 30% 107%, 
+    #fdf497 0%, 
+    #fdf497 5%, 
+    #fd5949 45%, 
+    #d6249f 60%, 
+    #285AEB 90%);
+}
         /* Responsive Adjustments */
         @media (min-width: 768px) {
             .food-grid {
@@ -636,16 +646,18 @@
         </div>
     </footer>
 
-    <!-- Floating Buttons -->
-    <div class="floating-buttons">
-        <a href="https://wa.me/919999999999?text=Hello%20Duck%20Delivery" class="floating-btn whatsapp-btn">
-            <span class="material-icons">whatsapp</span>
-        </a>
-        <a href="https://instagram.com/duckdeliveryofficial" class="floating-btn instagram-btn">
-            <span class="material-icons">photo_camera</span>
-        </a>
-    </div>
+<!-- Floating Buttons -->
+<div class="floating-buttons">
+  <!-- WhatsApp -->
+  <a href="https://wa.me/919999999999?text=Hello%20Duck%20Delivery" target="_blank" class="floating-btn real-whatsapp">
+    <img src="https://cdn-icons-png.flaticon.com/512/733/733585.png" alt="WhatsApp Logo" />
+  </a>
 
+  <!-- Instagram -->
+  <a href="https://instagram.com/duckdeliveryofficial" target="_blank" class="floating-btn real-instagram">
+    <img src="https://cdn-icons-png.flaticon.com/512/2111/2111463.png" alt="Instagram Logo" />
+  </a>
+</div>
     <!-- Firebase SDK -->
     <script type="module">
         // Import Firebase functions

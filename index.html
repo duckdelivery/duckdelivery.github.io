@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-        :root {
+            :root {
             --primary: #FFD700;
             --primary-light: #FFF9C4;
             --secondary: #FFA000;
@@ -226,9 +226,26 @@
                 height: 70px;
             }
         }
+        .remember-me {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .remember-me input {
+            width: auto;
+            margin-right: 10px;
+        }
+        
+        .remember-me label {
+            margin-bottom: 0;
+            color: #666;
+            font-weight: normal;
+        }
     </style>
 </head>
 <body>
+    <div class="login-container">
     <div class="login-container">
         <div class="logo-container">
             <div class="logo">
@@ -249,6 +266,10 @@
                 <label for="password">Password</label>
                 <input type="password" id="password" placeholder="Enter your password" required>
             </div>
+            <div class="remember-me">
+                <input type="checkbox" id="rememberMe">
+                <label for="rememberMe">Remember me</label>
+            </div>
             <button type="submit" class="btn btn-primary">Sign In</button>
         </form>
 
@@ -267,18 +288,20 @@
 
     <!-- Firebase SDK -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        // [Previous imports remain the same]
         import { 
             getAuth, 
             signInWithEmailAndPassword, 
             signInWithPopup, 
             GoogleAuthProvider,
-            sendPasswordResetEmail 
+            sendPasswordResetEmail,
+            setPersistence,
+            browserLocalPersistence,
+            browserSessionPersistence,
+            onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // Your web app's Firebase configuration
-        const firebaseConfig = {
+                const firebaseConfig = {
             apiKey: "AIzaSyCyi3tprlp3USCk17A1URPzExoX3jm1dcQ",
             authDomain: "duck-1de23.firebaseapp.com",
             projectId: "duck-1de23",
@@ -292,49 +315,61 @@
         const auth = getAuth(app);
         const provider = new GoogleAuthProvider();
 
+        // Check auth state on page load
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                // User is signed in, redirect to home page
+                window.location.href = 'home.html';
+            }
+        });
+
         // Login with email/password
-        document.getElementById('loginForm').addEventListener('submit', (e) => {
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
             e.preventDefault();
             
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const rememberMe = document.getElementById('rememberMe').checked;
             const message = document.getElementById('message');
             
-            signInWithEmailAndPassword(auth, email, password)
-                .then((userCredential) => {
-                    // Signed in 
-                    showMessage('success', 'Login successful! Redirecting...');
-                    setTimeout(() => {
-                        window.location.href = 'home.html';
-                    }, 1500);
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    showMessage('error', getErrorMessage(errorCode));
-                });
+            try {
+                // Set persistence based on user's choice
+                await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
+                
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                
+                showMessage('success', 'Login successful! Redirecting...');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1500);
+            } catch (error) {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                showMessage('error', getErrorMessage(errorCode));
+            }
         });
 
-        // Google Sign-In
-        document.getElementById('googleSignIn').addEventListener('click', () => {
-            signInWithPopup(auth, provider)
-                .then((result) => {
-                    // This gives you a Google Access Token
-                    const credential = GoogleAuthProvider.credentialFromResult(result);
-                    const token = credential.accessToken;
-                    
-                    // The signed-in user info
-                    const user = result.user;
-                    showMessage('success', 'Login successful! Redirecting...');
-                    setTimeout(() => {
-                        window.location.href = 'home.html';
-                    }, 1500);
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    showMessage('error', getErrorMessage(errorCode));
-                });
+        // Google Sign-In - modified to include persistence
+        document.getElementById('googleSignIn').addEventListener('click', async () => {
+            try {
+                const rememberMe = document.getElementById('rememberMe').checked;
+                await setPersistence(auth, rememberMe ? browserLocalPersistence : browserSessionPersistence);
+                
+                const result = await signInWithPopup(auth, provider);
+                
+                // This gives you a Google Access Token
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                
+                showMessage('success', 'Login successful! Redirecting...');
+                setTimeout(() => {
+                    window.location.href = 'home.html';
+                }, 1500);
+            } catch (error) {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                showMessage('error', getErrorMessage(errorCode));
+            }
         });
 
         // Forgot Password
