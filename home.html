@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Duck Delivery 🐥 | Narnaul's Favorite Food Delivery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>Duck Delivery - Home</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
         :root {
@@ -14,49 +14,53 @@
             --white: #FFFFFF;
             --gray: #F5F5F5;
             --dark-gray: #E0E0E0;
-            --text: #1C1C1E;
-            --blue: #007AFF;
-            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
-            --border-radius: 14px;
-            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --text: #333333;
+            --error: #FF5252;
+            --success: #4CAF50;
+            --whatsapp: #25D366;
+            --instagram: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
-            -webkit-tap-highlight-color: transparent;
+            font-family: 'Inter', sans-serif;
         }
 
         body {
             background-color: var(--white);
             color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
-        /* Header */
-        header {
-            background-color: var(--white);
-            padding: 15px 20px;
-            box-shadow: var(--shadow-sm);
+        /* Navigation Bar */
+        .navbar {
             position: sticky;
             top: 0;
-            z-index: 1000;
+            z-index: 100;
+            background-color: var(--white);
+            padding: 15px 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .logo {
+        .logo-container {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-weight: 700;
+            gap: 10px;
+        }
+
+        .logo-img {
+            width: 30px;
+            height: 30px;
+            object-fit: contain;
+        }
+
+        .logo-text {
+            font-weight: 600;
             font-size: 18px;
             color: var(--text);
         }
@@ -65,221 +69,170 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background-color: var(--primary-light);
+            background-color: var(--primary);
+            color: var(--white);
             display: flex;
-            align-items: center;
             justify-content: center;
-            font-weight: 500;
+            align-items: center;
+            font-weight: 600;
             cursor: pointer;
-            transition: var(--transition);
+            transition: transform 0.2s ease;
         }
 
         .user-avatar:hover {
             transform: scale(1.05);
         }
 
-        /* User Popup */
-        .user-popup {
-            position: fixed;
-            top: 0;
-            right: 0;
-            width: 100%;
-            max-width: 300px;
+        .user-dropdown {
+            position: absolute;
+            top: 70px;
+            right: 20px;
             background-color: var(--white);
-            box-shadow: var(--shadow-md);
-            border-radius: var(--border-radius);
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
             padding: 20px;
-            z-index: 2000;
-            transform: translateX(100%);
-            transition: transform 0.3s ease-out;
-            margin: 10px;
-        }
-
-        .user-popup.active {
-            transform: translateX(0);
-        }
-
-        .user-popup-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1500;
+            width: 280px;
+            z-index: 101;
+            display: none;
             opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
+            transform: translateY(-10px);
+            transition: opacity 0.3s ease, transform 0.3s ease;
         }
 
-        .user-popup-backdrop.active {
+        .user-dropdown.show {
+            display: block;
             opacity: 1;
-            pointer-events: all;
+            transform: translateY(0);
         }
 
-        .user-popup-header {
+        .user-info {
             display: flex;
             align-items: center;
-            gap: 12px;
             margin-bottom: 15px;
         }
 
-        .user-popup-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 500;
-            font-size: 20px;
-        }
-
-        .user-popup-info {
-            flex: 1;
-        }
-
-        .user-popup-name {
+        .user-name {
             font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 5px;
+            margin-right: 5px;
         }
 
         .verified-badge {
-            color: var(--blue);
-            font-size: 16px;
+            width: 16px;
+            height: 16px;
         }
 
-        .user-popup-email {
-            font-size: 14px;
+        .user-email {
             color: #666;
-            margin-top: 2px;
+            font-size: 14px;
+            margin-bottom: 20px;
         }
 
         .logout-btn {
-            display: block;
             width: 100%;
             padding: 12px;
             background-color: var(--gray);
             border: none;
-            border-radius: var(--border-radius);
+            border-radius: 8px;
             font-weight: 500;
-            margin-top: 20px;
             cursor: pointer;
-            transition: var(--transition);
+            transition: background-color 0.3s ease;
         }
 
         .logout-btn:hover {
-            background-color: #e0e0e0;
-        }
-
-        /* Main Content */
-        main {
-            flex: 1;
-            padding: 20px;
-            max-width: 600px;
-            margin: 0 auto;
-            width: 100%;
+            background-color: var(--dark-gray);
         }
 
         /* Hero Section */
         .hero {
+            padding: 20px;
             text-align: center;
-            margin: 20px 0 30px;
         }
 
         .hero-image {
             width: 100%;
-            max-width: 300px;
-            height: 300px;
+            max-width: 400px;
+            height: auto;
+            border-radius: 16px;
             margin: 0 auto 20px;
-            border-radius: var(--border-radius);
-            background-color: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 60px;
-            box-shadow: var(--shadow-sm);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .hero-buttons {
             display: flex;
+            justify-content: center;
             gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
             justify-content: center;
         }
 
-        .hero-btn {
-            padding: 15px 25px;
-            border-radius: var(--border-radius);
-            font-weight: 500;
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: var(--transition);
-            box-shadow: var(--shadow-sm);
-        }
-
-        .menu-btn {
+        .btn-primary {
             background-color: var(--primary);
             color: var(--text);
+            box-shadow: 0 4px 10px rgba(255, 215, 0, 0.3);
         }
 
-        .cart-btn {
-            background-color: var(--white);
-            color: var(--text);
+        .btn-primary:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(255, 160, 0, 0.3);
+        }
+
+        .btn-outline {
+            background-color: transparent;
             border: 1px solid var(--dark-gray);
+            color: var(--text);
         }
 
-        .hero-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: var(--shadow-md);
+        .btn-outline:hover {
+            background-color: var(--gray);
+            transform: translateY(-2px);
         }
 
-        /* Food Grid */
+        /* Featured Food Grid */
         .section-title {
             font-size: 22px;
             font-weight: 600;
-            margin: 30px 0 15px;
-            color: var(--text);
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            margin: 40px 20px 20px;
         }
 
         .food-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
-            margin-bottom: 30px;
+            padding: 0 20px;
         }
 
         .food-card {
             background-color: var(--white);
-            border-radius: var(--border-radius);
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: var(--shadow-sm);
-            transition: var(--transition);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
 
         .food-card:hover {
             transform: translateY(-5px);
-            box-shadow: var(--shadow-md);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
 
         .food-image {
             width: 100%;
-            height: 120px;
-            background-color: var(--primary-light);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
+            height: 140px;
+            object-fit: cover;
         }
 
-        .food-info {
+        .food-details {
             padding: 15px;
         }
 
@@ -288,306 +241,414 @@
             margin-bottom: 5px;
         }
 
-        .food-stats {
+        .food-subtext {
             font-size: 12px;
             color: #666;
             margin-bottom: 10px;
         }
 
         .food-price {
-            font-weight: 700;
-            margin-bottom: 15px;
+            font-weight: 600;
             color: var(--secondary);
+            margin-bottom: 15px;
         }
 
         .food-actions {
             display: flex;
-            gap: 8px;
+            gap: 10px;
         }
 
-        .food-btn {
-            flex: 1;
-            padding: 8px;
-            border: none;
-            border-radius: 8px;
+        .btn-small {
+            padding: 8px 12px;
             font-size: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: var(--transition);
+            border-radius: 8px;
         }
 
-        .add-to-cart {
+        .btn-add {
             background-color: var(--gray);
+            color: var(--text);
         }
 
-        .buy-now {
+        .btn-buy {
             background-color: var(--primary);
-        }
-
-        .food-btn:hover {
-            opacity: 0.9;
+            color: var(--text);
         }
 
         /* About Section */
         .about-section {
-            background-color: var(--primary-light);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            margin: 30px 0;
+            padding: 40px 20px;
+            margin-top: 40px;
+            background-color: var(--gray);
         }
 
-        .about-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 10px;
+        .about-content {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        /* Testimonial Slider */
+        .testimonial-section {
+            padding: 40px 20px;
+        }
+
+        .testimonial-container {
+            max-width: 500px;
+            margin: 0 auto;
+            position: relative;
+            height: 300px;
+        }
+
+        .testimonial {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: var(--white);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .testimonial.active {
+            opacity: 1;
+        }
+
+        .testimonial-user {
             display: flex;
             align-items: center;
-            gap: 8px;
+            margin-bottom: 15px;
         }
 
-        .about-text {
-            font-size: 14px;
-            line-height: 1.6;
+        .user-avatar-small {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 15px;
         }
 
-        /* Testimonials */
-        .testimonials {
-            display: flex;
-            overflow-x: auto;
-            gap: 15px;
-            padding: 10px 0 20px;
-            scrollbar-width: none;
+        .user-info-testimonial {
+            flex: 1;
         }
 
-        .testimonials::-webkit-scrollbar {
-            display: none;
+        .user-name-testimonial {
+            font-weight: 600;
+            margin-bottom: 5px;
         }
 
-        .testimonial-card {
-            min-width: 250px;
-            background-color: var(--white);
-            border-radius: var(--border-radius);
-            padding: 20px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        .testimonial-rating {
+        .stars {
             color: var(--primary);
-            margin-bottom: 10px;
-            font-size: 18px;
+            font-size: 14px;
         }
 
         .testimonial-text {
             font-style: italic;
-            margin-bottom: 10px;
-            font-size: 14px;
-        }
-
-        .testimonial-author {
-            font-weight: 600;
-            font-size: 14px;
+            color: #555;
         }
 
         /* Footer */
-        footer {
-            background-color: var(--primary-light);
-            padding: 30px 20px;
-            margin-top: 40px;
+        .footer {
+            background-color: var(--text);
+            color: var(--white);
+            padding: 40px 20px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            max-width: 600px;
+            margin: 0 auto;
         }
 
         .footer-links {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .footer-title {
+            font-weight: 600;
+            margin-bottom: 15px;
         }
 
         .footer-link {
-            color: var(--text);
+            color: var(--white);
             text-decoration: none;
             font-size: 14px;
-            transition: color 0.2s ease;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
         }
 
         .footer-link:hover {
-            color: var(--secondary);
+            opacity: 1;
         }
 
-        .copyright {
-            text-align: center;
-            margin-top: 30px;
-            font-size: 12px;
-            color: #666;
+        /* Floating Buttons */
+        .floating-buttons {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            pointer-events: none;
+            z-index: 99;
         }
 
-        /* Responsive */
-        @media (max-width: 480px) {
-            .hero-buttons {
-                flex-direction: column;
-            }
-            
-            .hero-btn {
-                justify-content: center;
-            }
-            
+        .floating-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            pointer-events: auto;
+            transition: transform 0.3s ease;
+        }
+
+        .floating-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .whatsapp-btn {
+            background-color: var(--whatsapp);
+            color: var(--white);
+        }
+
+        .instagram-btn {
+            background: var(--instagram);
+            color: var(--white);
+        }
+
+        /* Responsive Adjustments */
+        @media (min-width: 768px) {
             .food-grid {
-                grid-template-columns: 1fr;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 20px;
+                padding: 0 40px;
+            }
+
+            .section-title {
+                margin-left: 40px;
+                margin-right: 40px;
+            }
+
+            .hero-buttons {
+                gap: 20px;
+            }
+
+            .btn {
+                padding: 14px 28px;
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .food-grid {
+                grid-template-columns: repeat(4, 1fr);
+                max-width: 1200px;
+                margin: 0 auto;
             }
         }
     </style>
 </head>
 <body>
-    <!-- Header -->
-    <header>
-        <div class="logo">Delivery Duck 🐥</div>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="logo-container">
+            <img src="https://i.ibb.co/7YtW0b1/duck-logo.png" alt="Duck Delivery Logo" class="logo-img">
+            <span class="logo-text">Duck Delivery</span>
+        </div>
         <div class="user-avatar" id="userAvatar">U</div>
-    </header>
+        <div class="user-dropdown" id="userDropdown">
+            <div class="user-info">
+                <span class="user-name" id="userName">User Name</span>
+                <svg class="verified-badge" viewBox="0 0 24 24" fill="#1DA1F2">
+                    <path d="M22.5 12.5c0-1.58-.875-2.95-2.148-3.6.154-.435.238-.905.238-1.4 0-2.21-1.71-3.998-3.818-3.998-.47 0-.92.084-1.336.25C14.818 2.415 13.51 1.5 12 1.5s-2.816.917-3.437 2.25c-.415-.165-.866-.25-1.336-.25-2.11 0-3.818 1.79-3.818 4 0 .494.083.964.237 1.4-1.272.65-2.147 2.018-2.147 3.6 0 1.495.782 2.798 1.942 3.486-.02.17-.032.34-.032.514 0 2.21 1.708 4 3.818 4 .47 0 .92-.086 1.335-.25.62 1.334 1.926 2.25 3.437 2.25 1.512 0 2.818-.916 3.437-2.25.415.163.865.248 1.336.248 2.11 0 3.818-1.79 3.818-4 0-.174-.012-.344-.033-.513 1.158-.687 1.943-1.99 1.943-3.484zm-6.616-3.334l-4.334 6.5c-.145.217-.382.334-.625.334-.143 0-.288-.04-.416-.126l-.115-.094-2.415-2.415c-.293-.293-.293-.768 0-1.06s.768-.294 1.06 0l1.77 1.767 3.825-5.74c.23-.345.696-.436 1.04-.207.346.23.44.696.21 1.04z"/>
+                </svg>
+            </div>
+            <div class="user-email" id="userEmail">user@example.com</div>
+            <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+    </nav>
 
-    <!-- User Popup -->
-    <div class="user-popup-backdrop" id="userPopupBackdrop"></div>
-    <div class="user-popup" id="userPopup">
-        <div class="user-popup-header">
-            <div class="user-popup-avatar" id="popupAvatar">U</div>
-            <div class="user-popup-info">
-                <div class="user-popup-name">
-                    <span id="popupName">User</span>
-                    <span class="verified-badge">✓</span>
+    <!-- Hero Section -->
+    <section class="hero">
+        <img src="https://i.ibb.co/5KqY2bG/food-delivery-hero.jpg" alt="Food Delivery" class="hero-image">
+        <div class="hero-buttons">
+            <a href="menu.html" class="btn btn-primary">Visit Menu</a>
+            <a href="cart.html" class="btn btn-outline">View Cart</a>
+        </div>
+    </section>
+
+    <!-- Featured Food Grid -->
+    <h2 class="section-title">Popular Items</h2>
+    <div class="food-grid">
+        <div class="food-card">
+            <img src="https://i.ibb.co/7YtW0b1/duck-logo.png" alt="Duck Burger" class="food-image">
+            <div class="food-details">
+                <h3 class="food-name">Duck Burger</h3>
+                <p class="food-subtext">Ordered by 1.3K+ people</p>
+                <p class="food-price">₹199</p>
+                <div class="food-actions">
+                    <button class="btn btn-small btn-add">Add to Cart</button>
+                    <button class="btn btn-small btn-buy">Buy Now</button>
                 </div>
-                <div class="user-popup-email" id="popupEmail">user@example.com</div>
             </div>
         </div>
-        <button class="logout-btn" id="logoutBtn">
-            <span class="material-icons">logout</span> Logout
-        </button>
+        <div class="food-card">
+            <img src="https://i.ibb.co/7YtW0b1/duck-logo.png" alt="Crispy Fries" class="food-image">
+            <div class="food-details">
+                <h3 class="food-name">Crispy Fries</h3>
+                <p class="food-subtext">Ordered by 890+ people</p>
+                <p class="food-price">₹99</p>
+                <div class="food-actions">
+                    <button class="btn btn-small btn-add">Add to Cart</button>
+                    <button class="btn btn-small btn-buy">Buy Now</button>
+                </div>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://i.ibb.co/7YtW0b1/duck-logo.png" alt="Cheese Pizza" class="food-image">
+            <div class="food-details">
+                <h3 class="food-name">Cheese Pizza</h3>
+                <p class="food-subtext">Ordered by 2.1K+ people</p>
+                <p class="food-price">₹249</p>
+                <div class="food-actions">
+                    <button class="btn btn-small btn-add">Add to Cart</button>
+                    <button class="btn btn-small btn-buy">Buy Now</button>
+                </div>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://i.ibb.co/7YtW0b1/duck-logo.png" alt="Chicken Wrap" class="food-image">
+            <div class="food-details">
+                <h3 class="food-name">Chicken Wrap</h3>
+                <p class="food-subtext">Ordered by 750+ people</p>
+                <p class="food-price">₹179</p>
+                <div class="food-actions">
+                    <button class="btn btn-small btn-add">Add to Cart</button>
+                    <button class="btn btn-small btn-buy">Buy Now</button>
+                </div>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://i.ibb.co/7YtW0b1/duck-logo.png" alt="Veg Pasta" class="food-image">
+            <div class="food-details">
+                <h3 class="food-name">Veg Pasta</h3>
+                <p class="food-subtext">Ordered by 1.1K+ people</p>
+                <p class="food-price">₹159</p>
+                <div class="food-actions">
+                    <button class="btn btn-small btn-add">Add to Cart</button>
+                    <button class="btn btn-small btn-buy">Buy Now</button>
+                </div>
+            </div>
+        </div>
+        <div class="food-card">
+            <img src="https://i.ibb.co/7YtW0b1/duck-logo.png" alt="Chocolate Shake" class="food-image">
+            <div class="food-details">
+                <h3 class="food-name">Chocolate Shake</h3>
+                <p class="food-subtext">Ordered by 1.8K+ people</p>
+                <p class="food-price">₹129</p>
+                <div class="food-actions">
+                    <button class="btn btn-small btn-add">Add to Cart</button>
+                    <button class="btn btn-small btn-buy">Buy Now</button>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <main>
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-image">🦆</div>
-            <div class="hero-buttons">
-                <a href="menu.html" class="hero-btn menu-btn">
-                    <span>📖</span> Visit Menu
-                </a>
-                <a href="cart.html" class="hero-btn cart-btn">
-                    <span>🛒</span> View Cart
-                </a>
-            </div>
-        </section>
+    <!-- About Section -->
+    <section class="about-section">
+        <div class="about-content">
+            <h2 class="section-title">About Duck Delivery</h2>
+            <p>Duck Delivery is a Narnol-based startup providing ultra-fast, hot, and hygienic food delivery. Trusted by 1000+ people daily, we bring your favorite meals to your doorstep with unmatched speed and quality.</p>
+        </div>
+    </section>
 
-        <!-- Featured Food -->
-        <h2 class="section-title">
-            <span>🍔</span> Popular Items
-        </h2>
-        <div class="food-grid">
-            <div class="food-card">
-                <div class="food-image">🍗</div>
-                <div class="food-info">
-                    <h3 class="food-name">Chicken Biryani</h3>
-                    <div class="food-stats">Ordered by 1.3K+ people</div>
-                    <div class="food-price">₹180</div>
-                    <div class="food-actions">
-                        <button class="food-btn add-to-cart" data-item="Chicken Biryani" data-price="180">Add to Cart</button>
-                        <button class="food-btn buy-now" data-item="Chicken Biryani" data-price="180">Buy Now</button>
+    <!-- Testimonial Slider -->
+    <section class="testimonial-section">
+        <h2 class="section-title">What Our Customers Say</h2>
+        <div class="testimonial-container">
+            <div class="testimonial active">
+                <div class="testimonial-user">
+                    <img src="https://randomuser.me/api/portraits/women/32.jpg" alt="User" class="user-avatar-small">
+                    <div class="user-info-testimonial">
+                        <div class="user-name-testimonial">Priya Sharma</div>
+                        <div class="stars">★★★★★</div>
                     </div>
                 </div>
+                <p class="testimonial-text">"Duck Delivery is my go-to for quick lunches at work. The food always arrives hot and fresh. Highly recommended!"</p>
             </div>
-            <div class="food-card">
-                <div class="food-image">🍕</div>
-                <div class="food-info">
-                    <h3 class="food-name">Margherita Pizza</h3>
-                    <div class="food-stats">Ordered by 890+ people</div>
-                    <div class="food-price">₹220</div>
-                    <div class="food-actions">
-                        <button class="food-btn add-to-cart" data-item="Margherita Pizza" data-price="220">Add to Cart</button>
-                        <button class="food-btn buy-now" data-item="Margherita Pizza" data-price="220">Buy Now</button>
+            <div class="testimonial">
+                <div class="testimonial-user">
+                    <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="User" class="user-avatar-small">
+                    <div class="user-info-testimonial">
+                        <div class="user-name-testimonial">Rahul Patel</div>
+                        <div class="stars">★★★★★</div>
                     </div>
                 </div>
+                <p class="testimonial-text">"Amazing service! Ordered during heavy rain and still got my food in 30 minutes. The packaging was perfect."</p>
             </div>
-            <div class="food-card">
-                <div class="food-image">🍔</div>
-                <div class="food-info">
-                    <h3 class="food-name">Cheese Burger</h3>
-                    <div class="food-stats">Ordered by 1.1K+ people</div>
-                    <div class="food-price">₹120</div>
-                    <div class="food-actions">
-                        <button class="food-btn add-to-cart" data-item="Cheese Burger" data-price="120">Add to Cart</button>
-                        <button class="food-btn buy-now" data-item="Cheese Burger" data-price="120">Buy Now</button>
+            <div class="testimonial">
+                <div class="testimonial-user">
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="User" class="user-avatar-small">
+                    <div class="user-info-testimonial">
+                        <div class="user-name-testimonial">Ananya Gupta</div>
+                        <div class="stars">★★★★☆</div>
                     </div>
                 </div>
-            </div>
-            <div class="food-card">
-                <div class="food-image">🍜</div>
-                <div class="food-info">
-                    <h3 class="food-name">Veg Noodles</h3>
-                    <div class="food-stats">Ordered by 750+ people</div>
-                    <div class="food-price">₹110</div>
-                    <div class="food-actions">
-                        <button class="food-btn add-to-cart" data-item="Veg Noodles" data-price="110">Add to Cart</button>
-                        <button class="food-btn buy-now" data-item="Veg Noodles" data-price="110">Buy Now</button>
-                    </div>
-                </div>
+                <p class="testimonial-text">"Love the variety of options. The Duck Burger is my favorite - always juicy and flavorful."</p>
             </div>
         </div>
-
-        <!-- About Section -->
-        <section class="about-section">
-            <h2 class="about-title">
-                <span>🦆</span> About Duck Delivery
-            </h2>
-            <p class="about-text">
-                Duck Delivery is Narnaul's favorite food delivery startup, bringing you the best local cuisine with speed and care. 
-                We partner with top restaurants in Narnaul to deliver delicious meals right to your doorstep. 
-                Fast, affordable, and always with a smile!
-            </p>
-        </section>
-
-        <!-- Testimonials -->
-        <h2 class="section-title">
-            <span>🌟</span> What People Say
-        </h2>
-        <div class="testimonials">
-            <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
-                <p class="testimonial-text">
-                    "The fastest delivery in Narnaul! Food always arrives hot and fresh. Highly recommend!"
-                </p>
-                <div class="testimonial-author">- Rajesh K.</div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★☆</div>
-                <p class="testimonial-text">
-                    "Love their service! The duck-themed packaging is adorable and the food is delicious."
-                </p>
-                <div class="testimonial-author">- Priya M.</div>
-            </div>
-            <div class="testimonial-card">
-                <div class="testimonial-rating">★★★★★</div>
-                <p class="testimonial-text">
-                    "Reliable even during festivals when other services fail. My go-to food delivery app!"
-                </p>
-                <div class="testimonial-author">- Vikram S.</div>
-            </div>
-        </div>
-    </main>
+    </section>
 
     <!-- Footer -->
-    <footer>
-        <div class="footer-links">
-            <a href="menu.html" class="footer-link">Menu</a>
-            <a href="cart.html" class="footer-link">Cart</a>
-            <a href="about.html" class="footer-link">About Us</a>
-            <a href="contact.html" class="footer-link">Contact</a>
-            <a href="#" class="footer-link">Instagram</a>
-            <a href="#" class="footer-link">Terms</a>
-        </div>
-        <div class="copyright">
-            © 2023 Duck Delivery Narnaul. All rights reserved.
+    <footer class="footer">
+        <div class="footer-grid">
+            <div class="footer-links">
+                <h3 class="footer-title">Quick Links</h3>
+                <a href="home.html" class="footer-link">Home</a>
+                <a href="menu.html" class="footer-link">Menu</a>
+                <a href="cart.html" class="footer-link">Cart</a>
+            </div>
+            <div class="footer-links">
+                <h3 class="footer-title">Company</h3>
+                <a href="about.html" class="footer-link">About</a>
+                <a href="contact.html" class="footer-link">Contact</a>
+                <a href="terms.html" class="footer-link">Terms</a>
+            </div>
+            <div class="footer-links">
+                <h3 class="footer-title">Follow Us</h3>
+                <a href="https://instagram.com/duckdeliveryofficial" class="footer-link">Instagram</a>
+                <a href="#" class="footer-link">Facebook</a>
+                <a href="#" class="footer-link">Twitter</a>
+            </div>
         </div>
     </footer>
 
+    <!-- Floating Buttons -->
+    <div class="floating-buttons">
+        <a href="https://wa.me/919999999999?text=Hello%20Duck%20Delivery" class="floating-btn whatsapp-btn">
+            <span class="material-icons">whatsapp</span>
+        </a>
+        <a href="https://instagram.com/duckdeliveryofficial" class="floating-btn instagram-btn">
+            <span class="material-icons">photo_camera</span>
+        </a>
+    </div>
+
     <!-- Firebase SDK -->
     <script type="module">
-        // Import the functions you need from the SDKs you need
+        // Import Firebase functions
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { 
             getAuth, 
@@ -595,7 +656,7 @@
             signOut 
         } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // Your web app's Firebase configuration
+        // Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyCyi3tprlp3USCk17A1URPzExoX3jm1dcQ",
             authDomain: "duck-1de23.firebaseapp.com",
@@ -609,76 +670,52 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // DOM Elements
-        const userAvatar = document.getElementById('userAvatar');
-        const popupAvatar = document.getElementById('popupAvatar');
-        const popupName = document.getElementById('popupName');
-        const popupEmail = document.getElementById('popupEmail');
-        const userPopup = document.getElementById('userPopup');
-        const userPopupBackdrop = document.getElementById('userPopupBackdrop');
-        const logoutBtn = document.getElementById('logoutBtn');
-        const addToCartButtons = document.querySelectorAll('.add-to-cart');
-        const buyNowButtons = document.querySelectorAll('.buy-now');
-
-        // Initialize cart in localStorage if not exists
-        if (!localStorage.getItem('cart')) {
-            localStorage.setItem('cart', JSON.stringify([]));
-        }
-
-        // Get cart from localStorage
-        function getCart() {
-            return JSON.parse(localStorage.getItem('cart'));
-        }
-
-        // Add item to cart
-        function addToCart(item, price) {
-            const cart = getCart();
-            cart.push({ item, price });
-            localStorage.setItem('cart', JSON.stringify(cart));
-            
-            // Show confirmation
-            alert(`${item} added to cart!`);
-        }
-
-        // Buy now function (adds item and redirects to cart)
-        function buyNow(item, price) {
-            localStorage.setItem('cart', JSON.stringify([{ item, price }]));
-            window.location.href = 'cart.html';
-        }
-
         // Check auth state
         onAuthStateChanged(auth, (user) => {
-            if (user) {
-                // User is signed in
-                const displayName = user.displayName || "User";
-                const email = user.email;
-                const initials = displayName.charAt(0).toUpperCase();
-                
-                // Update UI
-                userAvatar.textContent = initials;
-                popupAvatar.textContent = initials;
-                popupName.textContent = displayName;
-                popupEmail.textContent = email;
-            } else {
-                // No user is signed in
+            if (!user) {
+                // User is not logged in, redirect to login page
                 window.location.href = 'index.html';
+            } else {
+                // User is logged in, update UI
+                updateUserInfo(user);
             }
         });
 
-        // Toggle user popup
-        userAvatar.addEventListener('click', () => {
-            userPopup.classList.add('active');
-            userPopupBackdrop.classList.add('active');
+        // Update user information in UI
+        function updateUserInfo(user) {
+            const userAvatar = document.getElementById('userAvatar');
+            const userName = document.getElementById('userName');
+            const userEmail = document.getElementById('userEmail');
+            
+            // Set avatar with first letter of display name or email
+            if (user.displayName) {
+                userAvatar.textContent = user.displayName.charAt(0).toUpperCase();
+                userName.textContent = user.displayName;
+            } else if (user.email) {
+                userAvatar.textContent = user.email.charAt(0).toUpperCase();
+                userName.textContent = user.email;
+            }
+            
+            userEmail.textContent = user.email;
+        }
+
+        // Toggle user dropdown
+        document.getElementById('userAvatar').addEventListener('click', () => {
+            document.getElementById('userDropdown').classList.toggle('show');
         });
 
-        // Close popup when clicking backdrop
-        userPopupBackdrop.addEventListener('click', () => {
-            userPopup.classList.remove('active');
-            userPopupBackdrop.classList.remove('active');
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            const dropdown = document.getElementById('userDropdown');
+            const avatar = document.getElementById('userAvatar');
+            
+            if (!dropdown.contains(e.target) && !avatar.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
         });
 
         // Logout functionality
-        logoutBtn.addEventListener('click', () => {
+        document.getElementById('logoutBtn').addEventListener('click', () => {
             signOut(auth).then(() => {
                 window.location.href = 'index.html';
             }).catch((error) => {
@@ -686,21 +723,42 @@
             });
         });
 
-        // Add to cart buttons
-        addToCartButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const item = button.dataset.item;
-                const price = button.dataset.price;
-                addToCart(item, price);
+        // Testimonial slider functionality
+        const testimonials = document.querySelectorAll('.testimonial');
+        let currentTestimonial = 0;
+
+        function showNextTestimonial() {
+            testimonials[currentTestimonial].classList.remove('active');
+            
+            currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+            
+            testimonials[currentTestimonial].classList.add('active');
+        }
+
+        // Auto-rotate testimonials every 6 seconds
+        setInterval(showNextTestimonial, 6000);
+
+        // Food items functionality
+        document.querySelectorAll('.btn-add').forEach(button => {
+            button.addEventListener('click', function() {
+                const foodCard = this.closest('.food-card');
+                const foodName = foodCard.querySelector('.food-name').textContent;
+                const foodPrice = foodCard.querySelector('.food-price').textContent;
+                
+                // In a real app, you would add this to localStorage or a cart state
+                alert(`${foodName} added to cart!`);
             });
         });
 
-        // Buy now buttons
-        buyNowButtons.forEach(button => {
-            button.addEventListener('click', () => {
-                const item = button.dataset.item;
-                const price = button.dataset.price;
-                buyNow(item, price);
+        document.querySelectorAll('.btn-buy').forEach(button => {
+            button.addEventListener('click', function() {
+                const foodCard = this.closest('.food-card');
+                const foodName = foodCard.querySelector('.food-name').textContent;
+                const foodPrice = foodCard.querySelector('.food-price').textContent;
+                
+                // In a real app, you would add this to localStorage and redirect to cart
+                alert(`Buying ${foodName} now!`);
+                // window.location.href = 'cart.html';
             });
         });
     </script>
